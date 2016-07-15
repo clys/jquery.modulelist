@@ -1,0 +1,46 @@
+.moduleList-list .placeholder {
+    border: 1px solid #080808;
+    background: #fff;
+}
+
+.moduleList-list .helper {
+    border: 1px solid #080808;
+}
+
+.moduleList-list .helper > * {
+    opacity: 0.5;
+}
+
+.moduleList-list .row:first-child .up {
+    visibility: hidden;
+}
+
+.moduleList-list .row:last-child .down {
+    visibility: hidden;
+}
+
+.moduleList-list .row .up, .moduleList-list .row .down, .moduleList-list .row .del {
+    cursor: pointer;
+}
+
+.moduleList-list .row {
+    border: 1px solid #080808;
+}
+
+.moduleList-list .row:not(:first-child) {
+    border-top-width: 0;
+}
+
+.moduleList-list .row .handle {
+    color: #fff;
+    background-color: #222;
+    border: 1px solid #080808;
+    text-align: right;
+    cursor: ns-resize;
+    display: none;
+}
+
+.moduleList-list .row.activity .handle {
+    display: block !important;
+}
+

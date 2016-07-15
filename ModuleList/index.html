@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>jquery.modulelist.js</title>
+    <link rel="stylesheet" href="jquery.modulelist.css">
+    <script src="../jquery/1.9.1/jquery.js"></script>
+    <script src="../jquery/ui/1.11.4/jquery-ui.js"></script>
+    <script src="jquery.modulelist.js"></script>
+    <script>
+        $(function () {
+            $('#啊？').moduleList({
+                draggable: '#draggable > div',
+                sortable: '#啊？',
+                addCallback: function (event, ui) {
+
+                },
+                clickRoleBefore: {
+                    del: function ($e, $row, eleObj) {
+                        return confirm("真的要删掉" + $row.text() + "吗？")
+                    }
+                },
+
+
+                draggableEx: {},
+                sortableEx: {}
+            }).moduleList('buildHandle', '*');
+
+            $('body').disableSelection();
+        })
+    </script>
+</head>
+<body>
+
+<div id="draggable">
+    <div data-code="1">啊？</div>
+    <div data-code="2">啊!</div>
+    <div data-code="3">啊@</div>
+    <div data-code="4">啊#</div>
+    <div data-code="5">啊$</div>
+</div>
+
+<hr>
+
+<div id="啊？">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+</div>
+
+
+</body>
+</html>
