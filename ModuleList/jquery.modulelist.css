@@ -20,6 +20,10 @@
     visibility: hidden;
 }
 
+.moduleList-list .row.ui-sortable-helper .up,.moduleList-list .row.ui-sortable-helper .down{
+    visibility: hidden;
+}
+
 .moduleList-list .row .up, .moduleList-list .row .down, .moduleList-list .row .del {
     cursor: pointer;
 }
@@ -32,7 +36,7 @@
     border-top-width: 0;
 }
 
-.moduleList-list .row .handle {
+.moduleList-list .row>.handle {
     color: #fff;
     background-color: #222;
     border: 1px solid #080808;
@@ -41,7 +45,7 @@
     display: none;
 }
 
-.moduleList-list .row.activity .handle {
+.moduleList-list .row.activity>.handle {
     display: block !important;
 }
 

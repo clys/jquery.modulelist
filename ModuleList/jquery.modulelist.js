@@ -22,9 +22,9 @@
                 down: downRow,
                 del: delRow,
                 row: activityRow
-            }
-        },
-        currentEleObj = null;
+            },
+            listClass: 'moduleList-list'
+        };
     $.fn[pluginMethodsName] = function (method) {
         // Method calling logic
         if (methods[method]) {
@@ -36,6 +36,7 @@
         }
 
     };
+    initPlugin();
     /* private methods ------------------------------------------------------ */
     var utils = {
         pool: {
@@ -97,8 +98,32 @@
         return $ele.attr(attrName) || $ele.parents('[' + attrName + ']:first').attr(attrName);
     }
 
-    function init() {
-        var $e = currentEleObj.ele, param = currentEleObj.param, $sortable = $(param.sortable);
+    function initPlugin() {
+        var listClassS = '.' + pool.listClass;
+        $(document).off('.' + pluginMethodsName)
+            .on('sortreceive.' + pluginMethodsName, listClassS, function (event, ui) {
+                var $t = $(ui.helper);
+                buildHandle($t, event, ui);
+                event.stopPropagation();
+            })
+            .on('click.' + pluginMethodsName, listClassS + ' [role]', function (event) {
+                clickRole.apply(this, [event]);
+                event.stopPropagation();
+            })
+            .on('sortstop.' + pluginMethodsName, listClassS, function (event, ui) {
+                //玄学护盾
+                $(listClassS).find('.ui-sortable-helper').remove();
+                event.stopPropagation();
+            }).on('click.' + pluginMethodsName, function (event) {
+                if (pullEleObj(event.target) == null) {
+                    inertiaAllRow();
+                }
+                event.stopPropagation();
+            });
+    }
+
+    function init(eleObj) {
+        var $e = eleObj.ele, param = eleObj.param, $sortable = $(param.sortable);
 
         $(param.draggable).draggable($.extend(
             {},
@@ -110,15 +135,21 @@
             param.draggableEx
         ));
         $sortable
-            .addClass('moduleList-list')
+            .addClass(pool.listClass)
             .sortable($.extend(
                 {},
                 {
                     helper: function (a, b) {
                         var w = b.innerWidth(), h = b.innerHeight(),
-                            $new = $($('<div class="helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
+                        $new = $($('<div class="helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
+                        //    $new = $(b.prop("outerHTML"));
+                        //$new.css({
+                        //    width: w,
+                        //    height: h
+                        //});
                         return $new;
                     },
+                    items: '[role="row"]',
                     handle: '[role="handle"]',
                     cancel: '[role="handle"] *',
                     axis: 'y',
@@ -126,36 +157,20 @@
                     forcePlaceholderSize: true
                 },
                 param.sortableEx
-            ))
-            .on('sortreceive.' + pluginMethodsName, function (event, ui) {
-                var $t = $(ui.helper);
-                buildHandle($t, event, ui);
-            })
-            .on('click.' + pluginMethodsName, '[role]', clickRole)
-            .on('sortstop', function (event, ui) {
-                //玄学护盾
-                $sortable.find('.helper.ui-sortable-helper').remove()
-            });
-
-        $('body').on('click.' + pluginMethodsName, function (e) {
-            if (!$.contains($sortable.get(0), e.target)) {
-                inertiaAllRow();
-            }
-            e.stopPropagation();
-        })
+            ));
     }
 
     function buildHandle(e, event, ui) {
-        var $e = $(e);
+        var $e = $(e), eleObj = pullEleObj(e);
         if ($e.find('[role="handle"]').size() > 0) return;
-        if (currentEleObj.param.empty && event.type !== 'code.buildHandle') {
+        if (eleObj.param.empty && event.type !== 'code.buildHandle') {
             $e.html('');
         }
-        $e.prepend(currentEleObj.param.handleHtml).css({
+        $e.prepend(eleObj.param.handleHtml).css({
             width: 'initial',
             height: 'initial'
         }).attr('role', 'row').addClass('row');
-        currentEleObj.param.addCallback.apply(e, [event, ui]);
+        eleObj.param.addCallback.apply(e, [event, ui]);
     }
 
     function getRow(e) {
@@ -167,9 +182,9 @@
     }
 
     function clickRole(eve) {
-        var $e = $(this), $row = getRow($e), role = $e.attr('role'), param = currentEleObj.param, carry = true;
+        var $e = $(this), eleObj = pullEleObj($e), $row = getRow($e), role = $e.attr('role'), param = eleObj.param, carry = true;
         if (param.clickRoleBefore[role]) {
-            carry = param.clickRoleBefore[role]($e, $row, currentEleObj);
+            carry = param.clickRoleBefore[role]($e, $row, eleObj);
             carry != false && carry != true && (carry = true)
         }
         carry && pool.roleForFn[role] && pool.roleForFn[role]($e, $row);
@@ -180,7 +195,10 @@
     }
 
     function upRow($e, $row) {
-        $row.prev().before($row);
+        var $prev = $row.prev();
+        if ($prev.attr('role') !== 'handle') {
+            $prev.before($row);
+        }
     }
 
     function downRow($e, $row) {
@@ -192,8 +210,9 @@
         $row.addClass('activity')
     }
 
-    function inertiaAllRow() {
-        $(currentEleObj.param.sortable).find('[role="row"].activity').removeClass('activity');
+    function inertiaAllRow(e) {
+        $(e ? pullEleObj(e).param.sortable : '.' + pool.listClass)
+            .find('[role="row"].activity').removeClass('activity');
     }
 
 
@@ -206,9 +225,7 @@
                     eleObj = pushEleObj($currentEle, options),
                     param;
                 if (!eleObj) return true;
-                currentEleObj = eleObj;
-
-                init();
+                init(eleObj);
             });
             return this;
         },
