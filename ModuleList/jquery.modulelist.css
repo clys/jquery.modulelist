@@ -1,6 +1,7 @@
 .moduleList-list .placeholder {
     border: 1px solid #080808;
-    background: #fff;
+    background: #aaaaaa;
+    height: 15px !important;
 }
 
 .moduleList-list .helper {

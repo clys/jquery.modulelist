@@ -8,12 +8,17 @@
     <script src="../jquery/ui/1.11.4/jquery-ui.js"></script>
     <script src="jquery.modulelist.js"></script>
     <script>
+        var n = 0;
         $(function () {
             $('#啊？').moduleList({
                 draggable: '#draggable > div',
                 sortable: '#啊？',
+                empty: true,
                 addCallback: function (event, ui) {
-
+                    var $e = $(this);
+                    if(event.type !== 'code.buildHandle'){
+                        $e.append('<span>喵'+n+++'</span><br><span>data-code:'+$e.attr('data-code')+'</span>')
+                    }
                 },
                 clickRoleBefore: {
                     del: function ($e, $row, eleObj) {
@@ -38,11 +43,14 @@
     <div data-code="3">啊@</div>
     <div data-code="4">啊#</div>
     <div data-code="5">啊$</div>
+    <div data-code="6">
+        <img width="100px" src="https://www.baidu.com/img/bd_logo1.png">
+    </div>
 </div>
 
 <hr>
 
-<div id="啊？">
+<div id="啊？" style="width: 50%;">
     <div>1</div>
     <div>2</div>
     <div>3</div>

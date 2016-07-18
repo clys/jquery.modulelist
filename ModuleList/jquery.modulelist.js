@@ -6,6 +6,13 @@
         methods = {},
         pool = {
             defaultParam: {
+                draggable: '',
+                sortable: '',
+                empty: false,
+                addCallback: function (event, ui) {
+                },
+                draggableEx: {},
+                sortableEx: {},
                 clickRoleBefore: {},
                 handleHtml: '<div class="handle" role="handle"><span class="up" role="up">↑</span><span class="down" role="down">↓</span><span class="del" role="del">x</span></div>'
             },
@@ -46,54 +53,8 @@
             }
         },
         string: {
-            isBlank: function (str) {
-                return utils.object.isNull(str) || $.trim(str).length === 0;
-            },
-            isNotBlank: function (str) {
-                return !this.isBlank(str);
-            },
             isEmpty: function (str) {
                 return utils.object.isNull(str) || str.length === 0;
-            },
-            isNotEmpty: function (str) {
-                return !this.isEmpty(str)
-            },
-            buildTpl: function (tpl, data) {
-                var re = /\{%=?((?!%}).)*%}/g,
-                    code = "var r = [];",
-                    cursor = 0,
-                    match;
-
-                function add(str, mode) {
-                    if (utils.string.isEmpty(str)) {
-                        return add;
-                    }
-
-                    if (mode === 1) {
-                        code += str;
-                    } else if (mode === 2) {
-                        code += "r.push(" + str + ");"
-                    } else {
-                        code += "r.push('" + str.replace(/'/g, "\\'") + "');"
-                    }
-                    return add;
-                }
-
-                while (match = re.exec(tpl)) {
-                    add(tpl.slice(cursor, match.index))(match[0].replace(/(^\{%=|^\{%|%}$)/g, ""), /^(\t| )*\{%=/g.test(match[0]) ? 2 : 1);
-                    cursor = match.index + match[0].length;
-                }
-                add(tpl.substr(cursor));
-                code += 'return r.join("");';
-                var keys = [], param = [];
-                for (var key in data) {
-                    if (typeof data[key] === "function") {
-                        continue;
-                    }
-                    keys.push(key);
-                    param.push(data[key]);
-                }
-                return (new Function(keys.join(","), code.replace(/[\r\t\n]/g, ''))).apply(null, param);
             }
         }
     };
@@ -187,11 +148,14 @@
     function buildHandle(e, event, ui) {
         var $e = $(e);
         if ($e.find('[role="handle"]').size() > 0) return;
+        if (currentEleObj.param.empty && event.type !== 'code.buildHandle') {
+            $e.html('');
+        }
         $e.prepend(currentEleObj.param.handleHtml).css({
             width: 'initial',
             height: 'initial'
         }).attr('role', 'row').addClass('row');
-        pullEleObj($e).param.addCallback(event, ui);
+        currentEleObj.param.addCallback.apply(e, [event, ui]);
     }
 
     function getRow(e) {
