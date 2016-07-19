@@ -14,7 +14,7 @@
                 draggableEx: {},
                 sortableEx: {},
                 clickRoleBefore: {},
-                handleHtml: '<div class="handle" role="handle"><span class="up" role="up">↑</span><span class="down" role="down">↓</span><span class="del" role="del">x</span></div>'
+                handleHtml: '<span class="handle" role="handle"><span class="up" role="up">↑</span><span class="down" role="down">↓</span><span class="del" role="del">x</span></span>'
             },
             eleMap: {},
             roleForFn: {
@@ -60,9 +60,9 @@
         }
     };
 
-    function pushEleObj(ele, param) {
+    function pushEleObj(ele, param, mode) {
         var $ele = $(ele);
-        if (utils.object.isNotNull(pullEleObj($ele))) {
+        if (utils.object.isNotNull(pullEleObj($ele, mode))) {
             return false;
         }
         var parameter = $.extend({}, pool.defaultParam, param);
@@ -73,8 +73,8 @@
         return eleObj;
     }
 
-    function pullEleObj(ele) {
-        var uid = getAttrVal(ele, pluginEleTagName);
+    function pullEleObj(ele, mode) {
+        var uid = getAttrVal(ele, pluginEleTagName, mode);
         if (utils.string.isEmpty(uid)) {
             return null;
         }
@@ -93,9 +93,9 @@
         return removeEleObj;
     }
 
-    function getAttrVal(ele, attrName) {
+    function getAttrVal(ele, attrName, mode) {
         var $ele = $(ele);
-        return $ele.attr(attrName) || $ele.parents('[' + attrName + ']:first').attr(attrName);
+        return (mode == '1' ? null : $ele.attr(attrName)) || (mode == '0' ? null : $ele.parents('[' + attrName + ']:first').attr(attrName));
     }
 
     function initPlugin() {
@@ -123,35 +123,46 @@
     }
 
     function init(eleObj) {
-        var $e = eleObj.ele, param = eleObj.param, $sortable = $(param.sortable);
+        var $e = eleObj.ele,
+            param = eleObj.param,
+            $sortable = $(param.sortable),
+            $draggable = $(param.draggable),
+            pid = $e.attr(pluginEleTagName),
+            pEleObj = pullEleObj($sortable, 1);
 
-        $(param.draggable).draggable($.extend(
-            {},
-            {
-                connectToSortable: param.sortable,
-                helper: "clone",
-                revert: "invalid"
-            },
-            param.draggableEx
-        ));
+        if (pEleObj != null && pEleObj.param.draggable == param.draggable) {
+            pEleObj.param.sortable += ',' + param.sortable;
+            $draggable.draggable("option", "connectToSortable", pEleObj.param.sortable);
+        } else {
+            $draggable
+                .draggable($.extend(
+                    {},
+                    {
+                        connectToSortable: param.sortable,
+                        helper: "clone",
+                        revert: "invalid"
+                    },
+                    param.draggableEx
+                ));
+        }
+
+
         $sortable
+            .attr(pluginEleTagName, pid)
             .addClass(pool.listClass)
             .sortable($.extend(
                 {},
                 {
                     helper: function (a, b) {
                         var w = b.innerWidth(), h = b.innerHeight(),
-                        $new = $($('<div class="helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
-                        //    $new = $(b.prop("outerHTML"));
-                        //$new.css({
-                        //    width: w,
-                        //    height: h
-                        //});
+                            $new = $($('<div class="moduleList-list helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
                         return $new;
                     },
+                    appendTo: document.body,
                     items: '[role="row"]',
                     handle: '[role="handle"]',
                     cancel: '[role="handle"] *',
+                    tolerance: 'pointer',
                     axis: 'y',
                     placeholder: 'placeholder',
                     forcePlaceholderSize: true
@@ -162,7 +173,10 @@
 
     function buildHandle(e, event, ui) {
         var $e = $(e), eleObj = pullEleObj(e);
-        if ($e.find('[role="handle"]').size() > 0) return;
+        if (
+            $e.find('[role="handle"]').size() > 0
+            || !utils.string.isEmpty($e.attr('role'))
+        ) return;
         if (eleObj.param.empty && event.type !== 'code.buildHandle') {
             $e.html('');
         }
@@ -182,7 +196,12 @@
     }
 
     function clickRole(eve) {
-        var $e = $(this), eleObj = pullEleObj($e), $row = getRow($e), role = $e.attr('role'), param = eleObj.param, carry = true;
+        var $e = $(this),
+            eleObj = pullEleObj($e, '1'),
+            $row = getRow($e),
+            role = $e.attr('role'),
+            param = eleObj.param,
+            carry = true;
         if (param.clickRoleBefore[role]) {
             carry = param.clickRoleBefore[role]($e, $row, eleObj);
             carry != false && carry != true && (carry = true)
@@ -206,13 +225,25 @@
     }
 
     function activityRow($e, $row) {
-        inertiaAllRow($e);
+        inertiaAllRow($row);
+
+        var $p = $row.parents('[role="row"]:eq(0)');
+        if ($p.size() > 0) {
+            $p.click();
+        }
+
+
         $row.addClass('activity')
     }
 
     function inertiaAllRow(e) {
-        $(e ? pullEleObj(e).param.sortable : '.' + pool.listClass)
-            .find('[role="row"].activity').removeClass('activity');
+        var $e;
+        if (e) {
+            $e = $(pullEleObj(e, '1').param.sortable);
+        } else {
+            $e = $('.' + pool.listClass);
+        }
+        $e.find('[role="row"].activity').removeClass('activity');
     }
 
 
@@ -222,7 +253,7 @@
             var $ele = $(this);
             $ele.each(function () {
                 var $currentEle = $(this),
-                    eleObj = pushEleObj($currentEle, options),
+                    eleObj = pushEleObj($currentEle, options, '0'),
                     param;
                 if (!eleObj) return true;
                 init(eleObj);

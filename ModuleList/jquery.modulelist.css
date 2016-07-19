@@ -4,39 +4,45 @@
     height: 15px !important;
 }
 
-.moduleList-list .helper {
+.moduleList-list.helper {
     border: 1px solid #080808;
 }
 
-.moduleList-list .helper > * {
+.moduleList-list.helper>* {
     opacity: 0.5;
 }
 
-.moduleList-list .row:first-child .up {
+.row:nth-of-type(2){
+    background: red;
+}
+
+.moduleList-list>.row:first-child>.handle>.up {
     visibility: hidden;
 }
 
-.moduleList-list .row:last-child .down {
+.moduleList-list>.row:last-child>.handle>.down {
     visibility: hidden;
 }
 
-.moduleList-list .row.ui-sortable-helper .up,.moduleList-list .row.ui-sortable-helper .down{
+.moduleList-list>.row.ui-sortable-helper>.handle>.up, .moduleList-list>.row.ui-sortable-helper>.handle>.down {
     visibility: hidden;
 }
 
-.moduleList-list .row .up, .moduleList-list .row .down, .moduleList-list .row .del {
+.moduleList-list .handle>.up,.moduleList-list .handle>.down, .moduleList-list .handle>.del {
     cursor: pointer;
 }
 
-.moduleList-list .row {
+.moduleList-list>.row {
     border: 1px solid #080808;
 }
 
-.moduleList-list .row:not(:first-child) {
-    border-top-width: 0;
+
+.moduleList-list>.row:not(:last-child) {
+    border-bottom-width: 0;
 }
 
-.moduleList-list .row>.handle {
+
+.moduleList-list>.row>.handle {
     color: #fff;
     background-color: #222;
     border: 1px solid #080808;
@@ -45,7 +51,17 @@
     display: none;
 }
 
-.moduleList-list .row.activity>.handle {
+.moduleList-list>.row.activity>.handle {
     display: block !important;
 }
 
+.moduleList-list .moduleList-list .row {
+    border-left-width: 0;
+    border-right-width: 0;
+}
+.moduleList-list .moduleList-list .row:last-child {
+    border-bottom-width: 0;
+}
+.moduleList-list .moduleList-list.activity {
+    border: 2px solid #080808;
+}
