@@ -112,7 +112,7 @@
             })
             .on('sortstop.' + pluginMethodsName, listClassS, function (event, ui) {
                 //玄学护盾
-                $(listClassS).find('.ui-sortable-helper').remove();
+                $('.ui-sortable-helper').remove();
                 event.stopPropagation();
             }).on('click.' + pluginMethodsName, function (event) {
                 if (pullEleObj(event.target) == null) {
@@ -159,7 +159,7 @@
                         return $new;
                     },
                     appendTo: document.body,
-                    items: '[role="row"]',
+                    items: '>[role="row"]',
                     handle: '[role="handle"]',
                     cancel: '[role="handle"] *',
                     tolerance: 'pointer',
