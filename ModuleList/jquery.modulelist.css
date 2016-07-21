@@ -1,9 +1,15 @@
+.moduleList-list {
+    overflow: hidden;
+}
+
 .moduleList-list:after {
-    content:"";
-    background-color:yellow;
-    color:red;
-    font-weight:bold;
+    content: "拖动模块添加";
+    background-color: yellow;
+    color: red;
+    font-weight: bold;
     padding-right: 100%;
+    padding-left: 45%;
+    white-space: nowrap;
 }
 
 .moduleList-list .placeholder {
@@ -20,6 +26,7 @@
     opacity: 0.5;
 }
 
+.moduleList-list > .row:first-of-type > .handle .top,
 .moduleList-list > .row:first-of-type > .handle .up {
     visibility: hidden;
 }
@@ -28,12 +35,16 @@
     visibility: hidden;
 }
 
+.moduleList-list > .row.ui-sortable-helper > .handle .top,
 .moduleList-list > .row.ui-sortable-helper > .handle .up,
 .moduleList-list > .row.ui-sortable-helper > .handle .down {
     visibility: hidden;
 }
 
-.moduleList-list .handle > .up, .moduleList-list .handle > .down, .moduleList-list .handle > .del {
+.moduleList-list .handle > .top,
+.moduleList-list .handle > .up,
+.moduleList-list .handle > .down,
+.moduleList-list .handle > .del {
     cursor: pointer;
 }
 
@@ -41,10 +52,6 @@
     border: 1px solid #080808;
     margin-bottom: -1px;
 }
-
-/*.moduleList-list>.row:not(:last-child) {*/
-/*border-bottom-width: 0;*/
-/*}*/
 
 .moduleList-list > .row > .handle {
     color: #fff;
@@ -62,10 +69,6 @@
 .moduleList-list .moduleList-list .row {
     border-left-width: 0;
     border-right-width: 0;
-}
-
-.moduleList-list .moduleList-list .row:last-child {
-    /*border-bottom-width: 0;*/
 }
 
 .moduleList-list .row.activity {

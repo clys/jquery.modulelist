@@ -14,10 +14,16 @@
                 draggableEx: {},
                 sortableEx: {},
                 clickRoleBefore: {},
-                handleHtml: '<span class="handle" role="handle"><span class="up" role="up">↑</span><span class="down" role="down">↓</span><span class="del" role="del">x</span></span>'
+                handleHtml: '<span class="handle" role="handle">' +
+                '<span class="top" role="top"><b>↑</b></span>' +
+                '<span class="up" role="up">↑</span>' +
+                '<span class="down" role="down">↓</span>' +
+                '<span class="del" role="del">x</span>' +
+                '</span>'
             },
             eleMap: {},
             roleForFn: {
+                top: topRow,
                 up: upRow,
                 down: downRow,
                 del: delRow,
@@ -129,11 +135,11 @@
             $draggable = $(param.draggable),
             pid = $e.attr(pluginEleTagName),
             pEleObj = pullEleObj($sortable, 1);
-
         if (pEleObj != null && pEleObj.param.draggable == param.draggable) {
-            pEleObj.param.sortable += ',' + param.sortable;
-            $draggable.draggable("option", "connectToSortable", pEleObj.param.sortable);
+            pEleObj.param.sortables += ',' + param.sortable;
+            $draggable.draggable("option", "connectToSortable", pEleObj.param.sortables);
         } else {
+            param.sortables = param.sortable;
             $draggable
                 .draggable($.extend(
                     {},
@@ -212,6 +218,11 @@
     function delRow($e, $row) {
         $row.remove();
     }
+
+    function topRow($e, $row) {
+        $row.parents('.' + pool.listClass + ':eq(0)').find('> .row:eq(0)').before($row);
+    }
+
 
     function upRow($e, $row) {
         var $prev = $row.prev();
