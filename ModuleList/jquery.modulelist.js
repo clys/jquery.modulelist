@@ -29,7 +29,8 @@
                 del: delRow,
                 row: activityRow
             },
-            listClass: 'moduleList-list'
+            listClass: 'moduleList-list',
+            draggableRevert: true
         };
     $.fn[pluginMethodsName] = function (method) {
         // Method calling logic
@@ -120,11 +121,19 @@
                 //玄学护盾
                 $('.ui-sortable-helper').remove();
                 event.stopPropagation();
-            }).on('click.' + pluginMethodsName, function (event) {
+            })
+            .on('click.' + pluginMethodsName, function (event) {
                 if (pullEleObj(event.target) == null) {
                     inertiaAllRow();
                 }
                 event.stopPropagation();
+            })
+            .on('mouseenter', listClassS, function () {
+                pool.draggableRevert = false;
+            })
+            .on('mouseleave', listClassS, function () {
+                if(pullEleObj(pullEleObj(this).param.sortable,'1') != null) return;
+                pool.draggableRevert = true;
             });
     }
 
@@ -146,7 +155,14 @@
                     {
                         connectToSortable: param.sortable,
                         helper: "clone",
-                        revert: "invalid"
+                        cursorAt:{left:-5},
+                        revert: function (e) {
+                            if(e){
+                                return pullEleObj(e).param.draggable != param.draggable;
+                            }else{
+                                return pool.draggableRevert;
+                            }
+                        }
                     },
                     param.draggableEx
                 ));
