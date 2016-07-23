@@ -15,7 +15,7 @@
                 sortableEx: {},
                 clickRoleBefore: {},
                 handleHtml: '<span class="handle" role="handle">' +
-                '<span class="top" role="top"><b>↑</b></span>' +
+                '<span class="top" role="top"><b>^</b></span>' +
                 '<span class="up" role="up">↑</span>' +
                 '<span class="down" role="down">↓</span>' +
                 '<span class="del" role="del">x</span>' +
@@ -132,7 +132,8 @@
                 pool.draggableRevert = false;
             })
             .on('mouseleave', listClassS, function () {
-                if(pullEleObj(pullEleObj(this).param.sortable,'1') != null) return;
+                var eleObj = pullEleObj(this);
+                if (eleObj == null || pullEleObj(eleObj.param.sortable, '1') != null) return;
                 pool.draggableRevert = true;
             });
     }
@@ -155,11 +156,11 @@
                     {
                         connectToSortable: param.sortable,
                         helper: "clone",
-                        cursorAt:{left:-5},
+                        cursorAt: {left: -5},
                         revert: function (e) {
-                            if(e){
+                            if (e) {
                                 return pullEleObj(e).param.draggable != param.draggable;
-                            }else{
+                            } else {
                                 return pool.draggableRevert;
                             }
                         }
@@ -185,7 +186,6 @@
                     handle: '[role="handle"]',
                     cancel: '[role="handle"] *',
                     tolerance: 'pointer',
-                    axis: 'y',
                     placeholder: 'placeholder',
                     forcePlaceholderSize: true
                 },
@@ -205,7 +205,7 @@
         $e.prepend(eleObj.param.handleHtml).css({
             width: 'initial',
             height: 'initial'
-        }).attr('role', 'row').addClass('row');
+        }).attr('role', 'row').addClass('mRow');
         eleObj.param.addCallback.apply(e, [event, ui]);
     }
 
@@ -236,7 +236,7 @@
     }
 
     function topRow($e, $row) {
-        $row.parents('.' + pool.listClass + ':eq(0)').find('> .row:eq(0)').before($row);
+        $row.parents('.' + pool.listClass + ':eq(0)').find('> [role="row"]:eq(0)').before($row);
     }
 
 

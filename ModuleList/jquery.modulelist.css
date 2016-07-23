@@ -26,18 +26,18 @@
     opacity: 0.5;
 }
 
-.moduleList-list > .row:first-of-type > .handle .top,
-.moduleList-list > .row:first-of-type > .handle .up {
+.moduleList-list > .mRow:first-of-type > .handle .top,
+.moduleList-list > .mRow:first-of-type > .handle .up {
     visibility: hidden;
 }
 
-.moduleList-list > .row:last-of-type > .handle .down {
+.moduleList-list > .mRow:last-of-type > .handle .down {
     visibility: hidden;
 }
 
-.moduleList-list > .row.ui-sortable-helper > .handle .top,
-.moduleList-list > .row.ui-sortable-helper > .handle .up,
-.moduleList-list > .row.ui-sortable-helper > .handle .down {
+.moduleList-list > .mRow.ui-sortable-helper > .handle .top,
+.moduleList-list > .mRow.ui-sortable-helper > .handle .up,
+.moduleList-list > .mRow.ui-sortable-helper > .handle .down {
     visibility: hidden;
 }
 
@@ -48,12 +48,12 @@
     cursor: pointer;
 }
 
-.moduleList-list > .row {
+.moduleList-list > .mRow {
     border: 1px solid #080808;
     margin-bottom: -1px;
 }
 
-.moduleList-list > .row > .handle {
+.moduleList-list > .mRow > .handle {
     color: #fff;
     background-color: #222;
     border: 1px solid #080808;
@@ -62,16 +62,16 @@
     display: none;
 }
 
-.moduleList-list > .row.activity > .handle {
+.moduleList-list > .mRow.activity > .handle {
     display: block !important;
 }
 
-.moduleList-list .moduleList-list .row {
+.moduleList-list .moduleList-list .mRow {
     border-left-width: 0;
     border-right-width: 0;
 }
 
-.moduleList-list .row.activity {
+.moduleList-list .mRow.activity {
     border: 2px solid #080808;
     border-top-width: 0;
 }

@@ -1,0 +1,144 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/docs.min.css">
+    <link rel="stylesheet" href="static/css/github.css">
+
+    <script src="../jquery/1.9.1/jquery.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="static/js/dome.js"></script>
+    <script src="static/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel="stylesheet" href="../ModuleList/jquery.modulelist.css">
+    <script src="../jquery/ui/1.12.0/jquery-ui.min.js"></script>
+    <script src="../ModuleList/jquery.modulelist.js"></script>
+</head>
+<body>
+
+<div class="bs-docs-header" id="content" tabindex="-1">
+    <div class="container">
+        <h1>jquery.modulelist</h1>
+
+        <p>可以拖动添加模块的列表</p>
+    </div>
+</div>
+
+<div class="container-fluid" style="margin-left: 25px;margin-right: 25px">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><a class="anchorjs-link "
+                                       style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>使用方法
+            </h1>
+
+            依赖 jquery、jqueryui<br>
+            <br>
+
+            <h3>初始化:</h3>
+
+            <div class="highlight"><pre>
+<code>$('#啊？').moduleList(
+    {
+        draggable: '',//模块选择器
+        sortable: '',//列表选择器
+        empty: false,//添加模块到列表时初始化为空白
+        addCallback: function (event, ui) {//添加模块后的回调
+        },
+        draggableEx: {},//模块初始化时的参数(jqueryui的draggable)
+        sortableEx: {},//列表初始化时的参数(jqueryui的sortable)
+        clickRoleBefore: {},//执行role对应功能前的回调，返回flase阻止功能执行 可以自定义role 预设的role有 handle:拖拽块 top:置顶 up:上移 down:下移 del:删除
+        handleHtml: ''//拖动块的代码
+    }
+)</code>
+            </pre>
+            </div>
+
+            <h3>将子元素变为可拖动:</h3>
+
+            <div class="highlight"><pre>
+               <code>$('#啊？').moduleList('buildHandle', '>div');</code>
+            </pre>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><a class="anchorjs-link "
+                                       style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>演示
+            </h1>
+
+            <div class="highlight">
+                <pre>
+<code>$(function () {
+    var n = 0;
+    var p = {
+        draggable: '#draggable > div',
+        empty: true,
+        addCallback: function (event, ui) {
+            var $e = $(this);
+            if (event.type !== 'code.buildHandle') {
+            $e.append('<span>喵' + n++ + '</span><br><span>data-code:' + $e.attr('data-code') + '</span>')
+            }
+        },
+        clickRoleBefore: {
+            del: function ($e, $row, eleObj) {
+                return confirm("真的要删掉" + $row.text() + "吗？")
+            }
+        },
+        draggableEx: {},
+        sortableEx: {}
+    };
+    p.sortable = '#啊？';
+    $('#啊？').moduleList(p).moduleList('buildHandle', '>div');
+    p.sortable = '.ccc';
+    $('.ccc').moduleList(p).moduleList('buildHandle', '>div');
+    $('body').disableSelection();
+});</code>
+            </pre>
+            </div>
+            <div class="highlight">
+                <div class="row">
+                    <div id="draggable" class="col-md-3">
+                        <div data-code="1">啊？</div>
+                        <div data-code="2">啊!</div>
+                        <div data-code="3">啊@</div>
+                        <div data-code="4">啊#</div>
+                        <div data-code="5">啊$</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div id="啊？">
+                            <div>1</div>
+                            <div>
+                                2
+                                <div>2.1</div>
+                            </div>
+                            <div>
+                                <div>3</div>
+                                <div class="ccc">
+                                    <div>3.1</div>
+                                    <div>3.2</div>
+                                    <div>3.3</div>
+                                </div>
+                            </div>
+                            <div class="ccc">
+                                <div>4-1</div>
+                                <div>4-2</div>
+                                <div>4-3</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
