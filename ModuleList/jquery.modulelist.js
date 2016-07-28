@@ -14,6 +14,9 @@
                 draggableEx: {},
                 sortableEx: {},
                 clickRoleBefore: {},
+                elementTpl: function (e) {
+                    return e;
+                },
                 handleHtml: '<span class="handle" role="handle">' +
                 '<span class="top" role="top"><b>^</b></span>' +
                 '<span class="up" role="up">↑</span>' +
@@ -110,6 +113,7 @@
         $(document).off('.' + pluginMethodsName)
             .on('sortreceive.' + pluginMethodsName, listClassS, function (event, ui) {
                 var $t = $(ui.helper);
+                $t = buildElement($t, event, ui);
                 buildHandle($t, event, ui);
                 event.stopPropagation();
             })
@@ -191,6 +195,12 @@
                 },
                 param.sortableEx
             ));
+    }
+
+    function buildElement(e, event, ui) {
+        var $e = $(e), eleObj = pullEleObj(e), $newEle = $(eleObj.param.elementTpl(e));
+        $e.replaceWith($newEle);
+        return $newEle;
     }
 
     function buildHandle(e, event, ui) {
