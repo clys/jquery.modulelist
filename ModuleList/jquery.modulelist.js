@@ -14,7 +14,7 @@
                 draggableEx: {},
                 sortableEx: {},
                 clickRoleBefore: {},
-                elementTpl: function (e) {
+                elementTpl: function (e, event, ui) {
                     return e;
                 },
                 handleHtml: '<span class="handle" role="handle">' +
@@ -198,7 +198,7 @@
     }
 
     function buildElement(e, event, ui) {
-        var $e = $(e), eleObj = pullEleObj(e), $newEle = $(eleObj.param.elementTpl(e));
+        var $e = $(e), eleObj = pullEleObj(e), $newEle = $(eleObj.param.elementTpl(e, event, ui));
         $e.replaceWith($newEle);
         return $newEle;
     }
