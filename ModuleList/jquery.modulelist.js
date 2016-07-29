@@ -213,10 +213,7 @@
         if (eleObj.param.empty && event.type !== 'code.buildHandle') {
             $e.html('');
         }
-        $e.prepend(eleObj.param.handleHtml).css({
-            width: 'initial',
-            height: 'initial'
-        }).attr('role', 'row').addClass('mRow');
+        $e.prepend(eleObj.param.handleHtml).attr('role', 'row').addClass('mRow');
         eleObj.param.addCallback.apply(e, [event, ui]);
     }
 
