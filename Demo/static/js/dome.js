@@ -2,6 +2,7 @@ $(function () {
     var n = 0;
     var p = {
         draggable: '#draggable > div',
+        focusOutRange: '#啊♂',
         empty: true,
         addCallback: function (event, ui) {
             var $e = $(this);

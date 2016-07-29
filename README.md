@@ -6,6 +6,7 @@ $('#啊？').moduleList(
     {
         draggable: '',//模块选择器
         sortable: '',//列表选择器
+        focusOutRange: '',//触发失焦的区域
         empty: false,//添加模块到列表时初始化为空白
         addCallback: function (event, ui) {//添加模块后的回调
         },

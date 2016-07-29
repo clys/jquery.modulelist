@@ -8,6 +8,7 @@
             defaultParam: {
                 draggable: '',
                 sortable: '',
+                focusOutRange: '',
                 empty: false,
                 addCallback: function (event, ui) {
                 },
@@ -131,7 +132,7 @@
             })
             .on('click.' + pluginMethodsName, function (event) {
                 if (pullEleObj(event.target) == null) {
-                    inertiaAllRow();
+                    inertiaAllRow.apply(event.target);
                 }
                 event.stopPropagation();
             })
@@ -271,17 +272,32 @@
         }
 
 
-        $row.addClass('activity')
+        $row.addClass('activity');
     }
 
     function inertiaAllRow(e) {
-        var $e;
+        var $e, eleObj, that = this;
         if (e) {
             $e = $(pullEleObj(e, '1').param.sortable);
         } else {
             $e = $('.' + pool.listClass);
         }
-        $e.find('[role="row"].activity').removeClass('activity');
+        var $activity = $e.find('[role="row"].activity');
+        if (that == window) {
+            $activity.removeClass('activity');
+        } else {
+            that = $(that);
+            var foutr;
+            $.each($activity, function (i, ele) {
+                eleObj = pullEleObj(ele);
+                if (!eleObj) return true;
+                foutr = $(eleObj.param.focusOutRange);
+                if (foutr.size() == 0 || foutr.find(that).size() > 0 || foutr.filter(that).size() > 0) {
+                    $(ele).removeClass('activity');
+                }
+            })
+        }
+
     }
 
 

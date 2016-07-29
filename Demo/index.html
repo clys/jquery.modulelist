@@ -42,6 +42,7 @@
     {
         draggable: '',//模块选择器
         sortable: '',//列表选择器
+        focusOutRange: '',//触发失焦的区域
         empty: false,//添加模块到列表时初始化为空白
         addCallback: function (event, ui) {//添加模块后的回调
         },
@@ -75,6 +76,7 @@
     var n = 0;
     var p = {
         draggable: '#draggable > div',
+        focusOutRange: '#啊♂',
         empty: true,
         addCallback: function (event, ui) {
             var $e = $(this);
@@ -99,7 +101,7 @@
             </pre>
             </div>
             <div class="highlight">
-                <div class="row">
+                <div class="row" id="啊♂">
                     <div id="draggable" class="col-md-3">
                         <div data-code="1">啊？</div>
                         <div data-code="2">啊!</div>
