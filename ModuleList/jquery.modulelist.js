@@ -15,7 +15,10 @@
                 sortableEx: {},
                 clickRoleBefore: {},
                 elementTpl: function (e, event, ui) {
-                    return e;
+                    return e.css({
+                        width: 'initial',
+                        height: 'initial'
+                    });
                 },
                 handleHtml: '<span class="handle" role="handle">' +
                 '<span class="top" role="top"><b>^</b></span>' +
