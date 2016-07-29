@@ -158,6 +158,7 @@
                 .draggable($.extend(
                     {},
                     {
+                        appendTo: document.body,
                         connectToSortable: param.sortable,
                         helper: "clone",
                         cursorAt: {left: -5},
