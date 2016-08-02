@@ -48,7 +48,7 @@
         },
         draggableEx: {},//模块初始化时的参数(jqueryui的draggable)
         sortableEx: {},//列表初始化时的参数(jqueryui的sortable)
-        clickRoleBefore: {},//执行role对应功能前的回调，返回flase阻止功能执行 可以自定义role 预设的role有 handle:拖拽块 top:置顶 up:上移 down:下移 del:删除
+        clickRoleBefore: {},//执行元素role属性对应功能前的回调，入参($e, $row, eleObj, presetFn)(点击的元素,点击的元素所在行,组件对象,直接调用执行预置功能)返回(true/flase||其它)(继续/阻止)功能执行 可以自定义role 预设的role有 handle:拖拽块 top:置顶 up:上移 down:下移 del:删除
         elementTpl: function(e, event, ui){return e;},//构建元素
         handleHtml: ''//拖动块的代码
     }
@@ -66,9 +66,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header"><a class="anchorjs-link "
-                                       style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>演示
-            </h1>
+            <h1 class="page-header"><a class="anchorjs-link " style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>演示</h1>
 
             <div class="highlight">
                 <pre>
@@ -85,7 +83,7 @@
             }
         },
         clickRoleBefore: {
-            del: function ($e, $row, eleObj) {
+            del: function ($e, $row, eleObj, presetFn) {
                 return confirm("真的要删掉" + $row.text() + "吗？")
             }
         },

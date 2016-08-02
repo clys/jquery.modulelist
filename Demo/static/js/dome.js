@@ -11,7 +11,7 @@ $(function () {
             }
         },
         clickRoleBefore: {
-            del: function ($e, $row, eleObj) {
+            del: function ($e, $row, eleObj,presetFn) {
                 return confirm("真的要删掉" + $row.text() + "吗？")
             }
         },

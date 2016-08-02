@@ -229,7 +229,7 @@
         return $e.parents('[role="row"]:eq(0)')
     }
 
-    function clickRole(eve) {
+    function clickRole(event) {
         var $e = $(this),
             eleObj = pullEleObj($e, '1'),
             $row = getRow($e),
@@ -237,10 +237,14 @@
             param = eleObj.param,
             carry = true;
         if (param.clickRoleBefore[role]) {
-            carry = param.clickRoleBefore[role]($e, $row, eleObj);
-            carry != false && carry != true && (carry = true)
+            carry = param.clickRoleBefore[role]($e, $row, eleObj, presetFn);
+            carry != false && carry != true && (carry = false)
         }
-        carry && pool.roleForFn[role] && pool.roleForFn[role]($e, $row);
+        carry && presetFn();
+        function presetFn() {
+            pool.roleForFn[role] && pool.roleForFn[role]($e, $row)
+        }
+
     }
 
     function delRow($e, $row) {
