@@ -330,7 +330,7 @@
             return this;
         },
         addDraggable: function (draggable) {
-            var $ele = typeof e == 'string' ? $(this).find(e) : $(e);
+            var $ele = $(this);
             $ele.each(function () {
                 var eleObj = pullEleObj(this);
                 if (eleObj) {
