@@ -4,11 +4,11 @@
 
 .moduleList-list:after {
     content: "拖动模块添加";
-    background-color: yellow;
-    color: red;
+    background-color: #b0e0e6;
+    color: #fffbf0;
+    text-align: center;
     font-weight: bold;
-    padding-right: 100%;
-    padding-left: 45%;
+    display: block;
     white-space: nowrap;
 }
 
