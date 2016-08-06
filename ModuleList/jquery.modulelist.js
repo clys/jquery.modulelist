@@ -176,30 +176,30 @@
                     },
                     param.draggableEx
                 ));
+            $sortable
+                .attr(pluginEleTagName, pid)
+                .addClass(pool.listClass)
+                .sortable($.extend(
+                    {},
+                    {
+                        helper: function (a, b) {
+                            var w = b.innerWidth(), h = b.innerHeight(),
+                                $new = $($('<div class="moduleList-list helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
+                            return $new;
+                        },
+                        appendTo: document.body,
+                        items: '>[role="row"]',
+                        handle: '[role="handle"]',
+                        cancel: '[role="handle"] *',
+                        tolerance: 'pointer',
+                        placeholder: 'placeholder',
+                        forcePlaceholderSize: true
+                    },
+                    param.sortableEx
+                ));
         }
 
 
-        $sortable
-            .attr(pluginEleTagName, pid)
-            .addClass(pool.listClass)
-            .sortable($.extend(
-                {},
-                {
-                    helper: function (a, b) {
-                        var w = b.innerWidth(), h = b.innerHeight(),
-                            $new = $($('<div class="moduleList-list helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
-                        return $new;
-                    },
-                    appendTo: document.body,
-                    items: '>[role="row"]',
-                    handle: '[role="handle"]',
-                    cancel: '[role="handle"] *',
-                    tolerance: 'pointer',
-                    placeholder: 'placeholder',
-                    forcePlaceholderSize: true
-                },
-                param.sortableEx
-            ));
     }
 
     function buildElement(e, event, ui) {
