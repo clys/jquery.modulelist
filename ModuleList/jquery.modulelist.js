@@ -1,5 +1,5 @@
 (function ($) {
-    var versions = "1.0",
+    var versions = "1.2",
         pluginName = "jQuery.moduleList",
         pluginMethodsName = "moduleList",
         pluginEleTagName = "moduleList-tag",
@@ -146,6 +146,34 @@
             });
     }
 
+    function addDraggable(eleObj, draggable) {
+        var $draggable = $(draggable),
+            param = eleObj.param;
+        buildDraggable($draggable, param);
+    }
+
+    function buildDraggable(draggable, param) {
+        var $draggable = $(draggable);
+        $draggable
+            .draggable($.extend(
+                {},
+                {
+                    appendTo: document.body,
+                    connectToSortable: param.sortables || param.sortable,
+                    helper: "clone",
+                    cursorAt: {left: -5},
+                    revert: function (e) {
+                        if (e) {
+                            return pullEleObj(e).param.draggable != param.draggable;
+                        } else {
+                            return pool.draggableRevert;
+                        }
+                    }
+                },
+                param.draggableEx
+            ));
+    }
+
     function init(eleObj) {
         var $e = eleObj.ele,
             param = eleObj.param,
@@ -158,48 +186,31 @@
             $draggable.draggable("option", "connectToSortable", pEleObj.param.sortables);
         } else {
             param.sortables = param.sortable;
-            $draggable
-                .draggable($.extend(
-                    {},
-                    {
-                        appendTo: document.body,
-                        connectToSortable: param.sortable,
-                        helper: "clone",
-                        cursorAt: {left: -5},
-                        revert: function (e) {
-                            if (e) {
-                                return pullEleObj(e).param.draggable != param.draggable;
-                            } else {
-                                return pool.draggableRevert;
-                            }
-                        }
-                    },
-                    param.draggableEx
-                ));
-            $sortable
-                .attr(pluginEleTagName, pid)
-                .addClass(pool.listClass)
-                .sortable($.extend(
-                    {},
-                    {
-                        helper: function (a, b) {
-                            var w = b.innerWidth(), h = b.innerHeight(),
-                                $new = $($('<div class="moduleList-list helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
-                            return $new;
-                        },
-                        appendTo: document.body,
-                        items: '>[role="row"]',
-                        handle: '[role="handle"]',
-                        cancel: '[role="handle"] *',
-                        tolerance: 'pointer',
-                        placeholder: 'placeholder',
-                        forcePlaceholderSize: true
-                    },
-                    param.sortableEx
-                ));
+            buildDraggable($draggable, param);
         }
 
 
+        $sortable
+            .attr(pluginEleTagName, pid)
+            .addClass(pool.listClass)
+            .sortable($.extend(
+                {},
+                {
+                    helper: function (a, b) {
+                        var w = b.innerWidth(), h = b.innerHeight(),
+                            $new = $($('<div class="moduleList-list helper" style="width: ' + w + 'px;height: ' + h + 'px">' + b.prop("outerHTML") + '</div>'));
+                        return $new;
+                    },
+                    appendTo: document.body,
+                    items: '>[role="row"]',
+                    handle: '[role="handle"]',
+                    cancel: '[role="handle"] *',
+                    tolerance: 'pointer',
+                    placeholder: 'placeholder',
+                    forcePlaceholderSize: true
+                },
+                param.sortableEx
+            ));
     }
 
     function buildElement(e, event, ui) {
@@ -315,6 +326,16 @@
                     param;
                 if (!eleObj) return true;
                 init(eleObj);
+            });
+            return this;
+        },
+        addDraggable: function (draggable) {
+            var $ele = typeof e == 'string' ? $(this).find(e) : $(e);
+            $ele.each(function () {
+                var eleObj = pullEleObj(this);
+                if (eleObj) {
+                    addDraggable(eleObj, draggable);
+                }
             });
             return this;
         },
