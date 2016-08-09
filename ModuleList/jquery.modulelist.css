@@ -18,6 +18,10 @@
     height: 15px !important;
 }
 
+.moduleList-list.helper:after {
+    display: none;
+}
+
 .moduleList-list.helper {
     border: 1px solid #080808;
 }
